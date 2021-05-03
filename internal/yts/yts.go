@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"regexp"
 
 	"github.com/anacrolix/torrent/metainfo"
@@ -96,6 +97,14 @@ func GetMovie(url string) (*Response, error) {
 func GetMovieTorrentLink(res *Response, quality string) string {
 	var links string
 	movies := res.Data.Movies
+
+	if len(movies) > 0 {
+		logrus.Info("there are few movies you can download, please enter the exact movie that you need to download")
+		for i := range movies {
+			logrus.Println(movies[i].TitleEnglish)
+		}
+		os.Exit(0)
+	}
 
 	for i := range movies {
 		for i2 := range movies[i].Torrents {
