@@ -2,3 +2,4 @@
 .env
 *.old
 config.yml
+build/
