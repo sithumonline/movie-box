@@ -98,8 +98,8 @@ func GetMovieTorrentLink(res *Response, quality string) string {
 	var links string
 	movies := res.Data.Movies
 
-	if len(movies) > 0 {
-		logrus.Info("there are few movies you can download, please enter the exact movie that you need to download")
+	if len(movies) > 1 {
+		logrus.Info("there are few movies you can download, please enter the exact movie that you need to download", len(movies))
 		for i := range movies {
 			logrus.Println(movies[i].TitleEnglish)
 		}
