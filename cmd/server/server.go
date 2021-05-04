@@ -1,13 +1,14 @@
 package server
 
 import (
-	"github.com/sithumonline/movie-box/api/handler"
 	"net/http"
+
+	"github.com/sithumonline/movie-box/api/handler"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -32,8 +33,11 @@ func Run() {
 	}))
 
 	r.Get("/movie-box/{name}", handler.AddMovie)
+	r.Get("/movie-box", handler.GetLogs)
+
+	log.Info("movie-box started listening on 3080")
 
 	if err := http.ListenAndServe(":3080", r); err != nil {
-		logrus.Fatal(err)
+		log.Fatal(err)
 	}
 }

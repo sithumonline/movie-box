@@ -1,14 +1,17 @@
 package handler
 
 import (
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 
+	logger "github.com/sithumonline/movie-box/internal/logs"
 	"github.com/sithumonline/movie-box/internal/torrent"
 	"github.com/sithumonline/movie-box/internal/yts"
 
 	"github.com/go-chi/chi"
+	log "github.com/sirupsen/logrus"
 )
 
 func AddMovie(w http.ResponseWriter, r *http.Request) {
@@ -40,8 +43,29 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, _ := torrent.GetTorrent().AddTorrent(tx)
+	t, err := torrent.GetTorrent().AddTorrent(tx)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	go func() {
+		select {
+		case log := <-t.GotInfo():
+			logger.Log().Info(log)
+		}
+	}()
+
 	t.DownloadAll()
 
 	RespondWithText(w, http.StatusOK, resLog.String())
+}
+
+func GetLogs(w http.ResponseWriter, r *http.Request) {
+	content, err := ioutil.ReadFile("info.log")
+
+	if err != nil {
+		log.Error(err)
+	}
+
+	RespondWithText(w, http.StatusOK, string(content))
 }

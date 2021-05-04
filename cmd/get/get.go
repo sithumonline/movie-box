@@ -55,7 +55,10 @@ var GetMovieCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		t, _ := c.AddTorrent(tx)
+		t, err := c.AddTorrent(tx)
+		if err != nil {
+			log.Fatal(err)
+		}
 		<-t.GotInfo()
 		t.DownloadAll()
 		c.WaitAll()
