@@ -63,7 +63,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetLogs(w http.ResponseWriter, r *http.Request) {
-	content, err := ioutil.ReadFile("info.log")
+	content, err := ioutil.ReadFile("/tmp/movie-box.log")
 
 	if err != nil {
 		log.Error(err)

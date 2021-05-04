@@ -13,7 +13,14 @@ type Logger struct {
 
 // Log initializes the logger
 func Log() *Logger {
-	file, err := os.OpenFile("info.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	path := "/tmp/movie-box.log"
+	f, err := os.Create(path)
+	if err != nil {
+		log.Error(err)
+	}
+	defer f.Close()
+
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Error(err)
 	}
