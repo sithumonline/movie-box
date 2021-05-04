@@ -2,6 +2,7 @@ package get
 
 import (
 	"net/url"
+	"os"
 
 	"github.com/sithumonline/movie-box/internal/yts"
 
@@ -35,8 +36,15 @@ var GetMovieCmd = &cobra.Command{
 			log.Fatal("movie not found")
 		}
 
-		torr := yts.GetMovieTorrentLink(yt, quality)
-		log.Info("torrent : " + torr)
+		torr, logs := yts.GetMovieTorrentLink(yt, quality)
+
+		for i := range logs {
+			log.Print(logs[i])
+		}
+
+		if torr == "" {
+			os.Exit(0)
+		}
 
 		cfg := torrent.NewDefaultClientConfig()
 		cfg.DataDir = destination

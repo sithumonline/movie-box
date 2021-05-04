@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"regexp"
 
 	"github.com/anacrolix/torrent/metainfo"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 //getMateInfo extract *metainfo.MetaInfo from torrent file
@@ -44,7 +43,7 @@ func GetMateInfoLink(url string) (*metainfo.MetaInfo, error) {
 
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			logrus.Error(err)
+			log.Error(err)
 		}
 	}()
 
@@ -80,7 +79,7 @@ func GetMovie(url string) (*Response, error) {
 
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			logrus.Error(err)
+			log.Error(err)
 		}
 	}()
 
@@ -94,16 +93,17 @@ func GetMovie(url string) (*Response, error) {
 }
 
 //GetMovieTorrentLink find torrent url that matches to given quality
-func GetMovieTorrentLink(res *Response, quality string) string {
+func GetMovieTorrentLink(res *Response, quality string) (string, []string) {
 	var links string
+	var logs []string
 	movies := res.Data.Movies
 
 	if len(movies) > 1 {
-		logrus.Info("there are few movies you can download, please enter the exact movie that you need to download", len(movies))
+		logs = append(logs, "there are few movies you can download, please enter the exact movie that you need to download\n")
 		for i := range movies {
-			logrus.Println(movies[i].TitleEnglish)
+			logs = append(logs, movies[i].TitleEnglish+"\n")
 		}
-		os.Exit(0)
+		return "", logs
 	}
 
 	for i := range movies {
@@ -113,10 +113,10 @@ func GetMovieTorrentLink(res *Response, quality string) string {
 				continue
 			}
 			links = movies[i].Torrents[i2].Url
-			logrus.Info("movie : " + movies[i].Url)
+			logs = append(logs, "movie : "+movies[i].Url+"\n", "torrent : "+links+"\n")
 			break
 		}
 	}
 
-	return links
+	return links, logs
 }
