@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/sithumonline/movie-box/internal/kodi"
 	logger "github.com/sithumonline/movie-box/internal/logs"
 	"github.com/sithumonline/movie-box/internal/torrent"
 	"github.com/sithumonline/movie-box/internal/yts"
@@ -28,7 +29,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	torr, logs := yts.GetMovieTorrentLink(yt, "1080p")
+	torr, logs, k := yts.GetMovieTorrentLink(yt, "1080p")
 	for i := range logs {
 		resLog.WriteString(logs[i])
 	}
@@ -56,6 +57,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	t.DownloadAll()
+	kodi.CreateMovieInfoFile(k, t.Name())
 
 	RespondWithText(w, http.StatusOK, resLog.String())
 }

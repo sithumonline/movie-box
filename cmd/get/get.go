@@ -36,7 +36,7 @@ var GetMovieCmd = &cobra.Command{
 			log.Fatal("movie not found")
 		}
 
-		torr, logs := yts.GetMovieTorrentLink(yt, quality)
+		torr, logs, _ := yts.GetMovieTorrentLink(yt, quality)
 
 		for i := range logs {
 			log.Print(logs[i])
