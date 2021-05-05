@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -27,7 +28,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	torr, logs, _ := yts.GetMovieTorrentLink(yt, "1080p")
+	torr, logs := yts.GetMovieTorrentLink(yt, "1080p")
 	for i := range logs {
 		resLog.WriteString(logs[i])
 	}
@@ -47,22 +48,18 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	/*
-		go func() {
-			select {
-			case log := <-t.GotInfo():
-				logger.Log().Info(log)
-			}
-		}()
-	*/
-
 	t.DownloadAll()
-	//	kodi.CreateMovieInfoFile(k, t.Name())
+
+	go func() {
+		select {
+		case <-t.GotInfo():
+			t.Closed()
+		}
+	}()
 
 	RespondWithText(w, http.StatusOK, resLog.String())
 }
 
-/*
 func GetLogs(w http.ResponseWriter, r *http.Request) {
 	content, err := ioutil.ReadFile("/tmp/movie-box.log")
 
@@ -72,4 +69,3 @@ func GetLogs(w http.ResponseWriter, r *http.Request) {
 
 	RespondWithText(w, http.StatusOK, string(content))
 }
-*/

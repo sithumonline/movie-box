@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/sithumonline/movie-box/internal/kodi"
-
 	"github.com/anacrolix/torrent/metainfo"
 	log "github.com/sirupsen/logrus"
 )
@@ -95,10 +93,9 @@ func GetMovie(url string) (*Response, error) {
 }
 
 //GetMovieTorrentLink find torrent url that matches to given quality
-func GetMovieTorrentLink(res *Response, quality string) (string, []string, *kodi.Movie) {
+func GetMovieTorrentLink(res *Response, quality string) (string, []string) {
 	var links string
-	var logs = []string{""}
-	var k *kodi.Movie
+	var logs []string
 	movies := res.Data.Movies
 
 	if len(movies) > 1 {
@@ -107,18 +104,10 @@ func GetMovieTorrentLink(res *Response, quality string) (string, []string, *kodi
 		for i := range movies {
 			logs = append(logs, movies[i].TitleEnglish+"\n")
 		}
-		return "", logs, k
+		return "", logs
 	}
 
 	for i := range movies {
-		k = &kodi.Movie{
-			Title:         movies[i].TitleEnglish,
-			OriginalTitle: movies[i].Title,
-			UserRating:    movies[i].Rating,
-			Plot:          movies[i].Summary,
-			Runtime:       movies[i].Runtime,
-			Thumb:         movies[i].LargeCoverImage,
-		}
 		for i2 := range movies[i].Torrents {
 			matched, _ := regexp.MatchString(quality, movies[i].Torrents[i2].Quality)
 			if !matched {
@@ -130,5 +119,5 @@ func GetMovieTorrentLink(res *Response, quality string) (string, []string, *kodi
 		}
 	}
 
-	return links, logs, k
+	return links, logs
 }

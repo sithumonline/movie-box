@@ -33,7 +33,7 @@ func Run() {
 	}))
 
 	r.Get("/movie-box/{name}", handler.AddMovie)
-	//	r.Get("/movie-box", handler.GetLogs)
+	r.Get("/movie-box", handler.GetLogs)
 
 	log.Info("movie-box started listening on 3080")
 
