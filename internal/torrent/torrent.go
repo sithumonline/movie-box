@@ -9,6 +9,7 @@ import (
 
 type Torrent = torrent.Torrent
 
+//GetTorrentClient return *torrent.Client closure
 func GetTorrentClient() func() *torrent.Client {
 	path := "/tmp/movie-box.log"
 	if _, err := os.Stat(path); os.IsNotExist(err) {
