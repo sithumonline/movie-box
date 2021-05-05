@@ -17,7 +17,6 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 	var resLog strings.Builder
 
 	name := chi.URLParam(r, "name")
-	log.Info("movie name : " + name)
 	yt, err := yts.GetMovie("https://yts.mx/api/v2/list_movies.json?query_term=" + url.QueryEscape(name))
 	if err != nil {
 		RespondWithError(w, http.StatusInternalServerError, err.Error())
