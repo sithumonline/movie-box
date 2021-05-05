@@ -14,7 +14,7 @@ func CreateMovieInfoFile(movie *Movie, filename string) {
 		log.Error(err)
 	}
 
-	path := home + "/Downloads/movie-box/" + filename + "/artist.nfo"
+	path := home + "/Downloads/movie-box/" + filename + "/movie.nfo"
 	f, err := os.Create(path)
 	if err != nil {
 		log.Error(err)
