@@ -1,13 +1,10 @@
 package handler
 
 import (
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 
-	"github.com/sithumonline/movie-box/internal/kodi"
-	logger "github.com/sithumonline/movie-box/internal/logs"
 	"github.com/sithumonline/movie-box/internal/torrent"
 	"github.com/sithumonline/movie-box/internal/yts"
 
@@ -19,6 +16,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 	var resLog strings.Builder
 
 	name := chi.URLParam(r, "name")
+	log.Info("movie name : " + name)
 	yt, err := yts.GetMovie("https://yts.mx/api/v2/list_movies.json?query_term=" + url.QueryEscape(name))
 	if err != nil {
 		RespondWithError(w, http.StatusInternalServerError, err.Error())
@@ -29,7 +27,7 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	torr, logs, k := yts.GetMovieTorrentLink(yt, "1080p")
+	torr, logs, _ := yts.GetMovieTorrentLink(yt, "1080p")
 	for i := range logs {
 		resLog.WriteString(logs[i])
 	}
@@ -49,19 +47,22 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 
-	go func() {
-		select {
-		case log := <-t.GotInfo():
-			logger.Log().Info(log)
-		}
-	}()
+	/*
+		go func() {
+			select {
+			case log := <-t.GotInfo():
+				logger.Log().Info(log)
+			}
+		}()
+	*/
 
 	t.DownloadAll()
-	kodi.CreateMovieInfoFile(k, t.Name())
+	//	kodi.CreateMovieInfoFile(k, t.Name())
 
 	RespondWithText(w, http.StatusOK, resLog.String())
 }
 
+/*
 func GetLogs(w http.ResponseWriter, r *http.Request) {
 	content, err := ioutil.ReadFile("/tmp/movie-box.log")
 
@@ -71,3 +72,4 @@ func GetLogs(w http.ResponseWriter, r *http.Request) {
 
 	RespondWithText(w, http.StatusOK, string(content))
 }
+*/
