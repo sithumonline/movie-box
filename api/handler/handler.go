@@ -43,18 +43,19 @@ func AddMovie(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	t, err := torrent.GetTorrent().AddTorrent(tx)
-	if err != nil {
-		log.Fatal(err)
-	}
+	t := func() *torrent.Torrent {
+		c := torrent.GetTorrentClient()
+		t, err := c().AddTorrent(tx)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	t.DownloadAll()
+		return t
+	}()
 
 	go func() {
-		select {
-		case <-t.GotInfo():
-			t.Closed()
-		}
+		<-t.GotInfo()
+		t.DownloadAll()
 	}()
 
 	RespondWithText(w, http.StatusOK, resLog.String())
