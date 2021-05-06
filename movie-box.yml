@@ -18,6 +18,10 @@ spec:
       labels:
         run: movie-box-server
     spec:
+      volumes:
+        - name: movie-box-downloads
+          hostPath:
+            path: ~/Downloads/movie-box
       containers:
         - name: movie-box
           image: ghcr.io/sithumonline/movie-box:0.0.4
@@ -25,10 +29,6 @@ spec:
           volumeMounts:
             - mountPath: /root/Downloads/movie-box
               name: movie-box-downloads
-      volumes:
-        - name: movie-box-downloads
-          hostPath:
-            path: ~/Downloads/movie-box
 ---
 apiVersion: v1
 kind: Service
