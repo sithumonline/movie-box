@@ -21,7 +21,7 @@ spec:
       containers:
         - name: movie-box
           image: ghcr.io/sithumonline/movie-box:0.0.4
-          args: server
+          args: ["server"]
 ---
 apiVersion: v1
 kind: Service
