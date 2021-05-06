@@ -20,6 +20,4 @@ COPY --from=builder /app/movie-box /usr/local/bin/
 
 EXPOSE 3080
 
-CMD [ "movie-box" , "server" ]
-
-ENTRYPOINT [ "movie-box" , "get" ]
+ENTRYPOINT [ "movie-box" ]
