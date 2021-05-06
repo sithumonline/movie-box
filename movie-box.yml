@@ -25,10 +25,10 @@ spec:
           volumeMounts:
             - mountPath: /root/Downloads/movie-box
               name: movie-box-downloads
-          volumes:
-            - name: movie-box-downloads
-              hostPath:
-                path: ~/Downloads/movie-box
+      volumes:
+        - name: movie-box-downloads
+          hostPath:
+            path: ~/Downloads/movie-box
 ---
 apiVersion: v1
 kind: Service
