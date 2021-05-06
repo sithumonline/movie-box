@@ -28,7 +28,7 @@ spec:
       volumes:
         - name: movie-box-downloads
           hostPath:
-            path: ~/Downloads/movie-box
+            path: /movie-box
 ---
 apiVersion: v1
 kind: Service
