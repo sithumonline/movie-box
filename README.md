@@ -1,5 +1,7 @@
 # Torrent-Box
 
+<img alt="movie-box-logo" src="./assets/images/mbox-logo-transparent.png" width="500" height="300">
+
 Download movie form [YTS](https://yts.mx/) without visiting to [YTS](https://yts.mx/api#list_movies)
 
 Built top on [anacrolix/torrent](https://github.com/anacrolix/torrent) lib
