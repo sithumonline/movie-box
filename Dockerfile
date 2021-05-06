@@ -12,6 +12,8 @@ RUN go build -ldflags="-w -s" -o movie-box .
 
 FROM alpine:3.13.4
 
+RUN apk add --no-cache libstdc++ libc6-compat
+
 WORKDIR /app
 
 COPY --from=builder /app/movie-box /usr/local/bin/
