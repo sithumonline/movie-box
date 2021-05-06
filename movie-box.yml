@@ -31,7 +31,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    run: movie-box
+    run: movie-box-server
   ports:
     - port: 3080
       targetPort: 3080
