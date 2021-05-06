@@ -22,6 +22,13 @@ spec:
         - name: movie-box
           image: ghcr.io/sithumonline/movie-box:0.0.4
           args: ["server"]
+          volumeMounts:
+            - mountPath: /root/Downloads/movie-box
+              name: movie-box-downloads
+          volumes:
+            - name: movie-box-downloads
+              hostPath:
+                path: ~/Downloads/movie-box
 ---
 apiVersion: v1
 kind: Service

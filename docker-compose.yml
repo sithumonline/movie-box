@@ -4,5 +4,7 @@ services:
     image: ghcr.io/sithumonline/movie-box:0.0.4
     restart: always
     command: server
+    volumes:
+      - ~/Downloads/movie-box:/root/Downloads/movie-box
     ports:
       - 3080:3080
