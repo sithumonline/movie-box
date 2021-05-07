@@ -41,7 +41,7 @@ docker run --rm -it ghcr.io/sithumonline/movie-box:0.0.4 \
 
 # Torrent-Box-Server
 
-Service for download movie form [YTS](https://yts.mx/) without visiting to [YTS](https://yts.mx/api#list_movies).
+Service for download movies form [YTS](https://yts.mx/) without visiting to [YTS](https://yts.mx/api#list_movies).
 
 ## Motivation
 
