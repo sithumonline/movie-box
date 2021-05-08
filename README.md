@@ -19,9 +19,12 @@ sudo wget https://github.com/sithumonline/movie-box/releases/download/v0.0.4/mov
 ```
 
 If your windows user now your start to think, Oh it's not for me... No! you're wrong. 
+<!-- 
 Windows have a very cool feature call [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
 Try WSL and go a head with it.
-
+--->
+![Windows Movie Box](./assets/images/screenshots/movie-box-get.PNG)
+_Note: If you face trouble try [WSL](https://docs.microsoft.com/en-us/windows/wsl/install-win10)._
 ## How to use
 
 ```shell script
