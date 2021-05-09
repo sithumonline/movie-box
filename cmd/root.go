@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/sithumonline/movie-box/cmd/get"
+	"github.com/sithumonline/movie-box/cmd/server"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -18,6 +19,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(get.GetMovieCmd)
+	rootCmd.AddCommand(server.RunServerCmd)
 }
 
 func Execute() {

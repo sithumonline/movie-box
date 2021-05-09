@@ -2,11 +2,14 @@ package get
 
 import (
 	"net/url"
+	"os"
+	"time"
 
 	"github.com/sithumonline/movie-box/internal/yts"
 
 	"github.com/anacrolix/torrent"
 	_ "github.com/anacrolix/torrent/metainfo"
+	"github.com/cheggaaa/pb/v3"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -35,8 +38,15 @@ var GetMovieCmd = &cobra.Command{
 			log.Fatal("movie not found")
 		}
 
-		torr := yts.GetMovieTorrentLink(yt, quality)
-		log.Info("torrent : " + torr)
+		torr, logs := yts.GetMovieTorrentLink(yt, quality)
+
+		for i := range logs {
+			log.Print(logs[i])
+		}
+
+		if torr == "" {
+			os.Exit(0)
+		}
 
 		cfg := torrent.NewDefaultClientConfig()
 		cfg.DataDir = destination
@@ -47,9 +57,21 @@ var GetMovieCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		t, _ := c.AddTorrent(tx)
+		t, err := c.AddTorrent(tx)
+		if err != nil {
+			log.Fatal(err)
+		}
 		<-t.GotInfo()
 		t.DownloadAll()
+
+		bar := pb.StartNew(int(t.Info().TotalLength()))
+		diff := int64(0)
+
+		for t.BytesCompleted() != t.Info().TotalLength() {
+			time.Sleep(time.Second)
+			bar.Add64(t.BytesCompleted() - diff)
+			diff = t.BytesCompleted()
+		}
 		c.WaitAll()
 
 		log.Info("ermahgerd, movie downloaded")
