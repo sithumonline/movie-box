@@ -24,7 +24,8 @@ func init() {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		logrus.Errorf(err.Error())
+		// Use constant format string to satisfy go vet
+		logrus.Errorf("%v", err)
 		os.Exit(1)
 	}
 }
