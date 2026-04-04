@@ -1,6 +1,6 @@
 module github.com/sithumonline/movie-box
 
-go 1.25.0
+go 1.25.8
 
 require (
 	github.com/anacrolix/torrent v1.61.0
